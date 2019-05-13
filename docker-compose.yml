@@ -1,0 +1,9 @@
+version: "2"
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - 8080:80
+    volumes:
+      - "./public_html:/var/www/html"
