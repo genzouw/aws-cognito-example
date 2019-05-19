@@ -1,25 +1,26 @@
-FROM php:7.3.5-apache
+FROM php:7.3-apache
 
-RUN apt-get update && apt-get install -y \
-  file \
-  git \
-  libgmp-dev \
-  libmcrypt-dev \
-  libmhash-dev \
-  libpq-dev \
-  re2c \
-  unzip \
-  zlib1g-dev \
+RUN apt-get update -y \
+  && apt-get -y install \
+    git \
+    libgmp-dev \
+    libpq-dev \
+    unzip \
+    zlib1g-dev \
+  && apt-get clean \
   ;
 
-RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/
-RUN docker-php-ext-configure gmp
-RUN docker-php-ext-install \
-  pdo \
-  pdo_pgsql \
-  pgsql \
-  mbstring \
-  gmp \
+RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
+  && docker-php-ext-install \
+    gmp \
+    mbstring \
+    pdo \
+    pdo_pgsql \
+    pgsql \
   ;
 
-COPY config/php.ini /usr/local/etc/php/
+RUN cd /usr/local/bin \
+  && php -r "readfile('https://getcomposer.org/installer');" | php \
+  && chmod u+x /usr/local/bin/composer.phar \
+  && ln -s /usr/local/bin/composer.phar /usr/local/bin/composer \
+  ;

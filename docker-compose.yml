@@ -4,6 +4,12 @@ services:
     build:
       context: .
     ports:
-      - 8080:80
+      - 80:80
+    # environment:
+      # - maildomain=postoq.com
+      # - smtp_user=mailuser:mailpassword
+    restart: always
     volumes:
-      - "./public_html:/var/www/html"
+      - $PWD/public_html:/var/www/html
+    ports:
+      - 8080:80
