@@ -8,7 +8,7 @@
       <div id="access_token">
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Jose\Factory\JWKFactory;
 use Jose\Loader;
@@ -16,7 +16,7 @@ use Jose\Loader;
 try {
     // We load the key set from an URL
 
-    $jku = 'https://cognito-idp.ap-northeast-1.amazonaws.com/ap-southeast-2_EPyUfpQq7/.well-known/jwks.json';
+    $jku = 'https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_Qr5Ow2KHj/.well-known/jwks.json';
     $jwk_set = JWKFactory::createFromJKU($jku);
 
     // We create our loader.
