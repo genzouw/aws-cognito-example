@@ -3,9 +3,9 @@
     <div id="container">
       <h1>Cognito Callback Page</h1>
 
-      <h2>Check AccessToken(JWT)</h2>
+      <h2>Check IdToken(JWT)</h2>
 
-      <div id="access_token">
+      <div id="id_token">
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -15,32 +15,33 @@ use Jose\Loader;
 
 try {
     // We load the key set from an URL
+    $cognitoClientId = 'ap-northeast-1_Qr5Ow2KHj';
+    $cognitoRegionId = 'ap-northeast-1';
+    $jku = "https://cognito-idp.{$cognitoRegionId}.amazonaws.com/{$cognitoClientId}/.well-known/jwks.json";
+    $jwk = JWKFactory::createFromJKU($jku);
 
-    $jku = 'https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_Qr5Ow2KHj/.well-known/jwks.json';
-    $jwk_set = JWKFactory::createFromJKU($jku);
-
-    // We create our loader.
     $loader = new Loader();
 
-    // This is the input we want to load verify.
-    $input = $_GET['access_token'];
+    $idToken = $_GET['id_token'];
 
     // The signature is verified using our key set.
     $jws = $loader->loadAndVerifySignatureUsingKeySet(
-    $input,
-    $jwk_set,
-    ['RS256'],
-    $signature_index
-);
+        $idToken,
+        $jwk,
+        ['RS256'],
+        $signatureIndex
+    );
 
     echo '<strong style="color: green;">OK!</strong>';
+    echo '<pre>';
+    echo "email = {$jws->getPayload()['email']}";
+    echo '</pre>';
 } catch (Exception $e) {
     echo '<strong style="color: red;">NG!</strong>';
     echo '<pre>';
     var_dump($e);
     echo '</pre>';
 }
-
 ?>
       </div>
   </body>

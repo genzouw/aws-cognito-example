@@ -3,12 +3,12 @@
     <div id="container">
       <h1>Cognito Callback Page</h1>
 
-      <h2>Get AccessToken(JWT)</h2>
+      <h2>Get IdToken(JWT)</h2>
 
-      <div id="access_token"></div>
+      <div id="id_token"></div>
 
       <div>
-        <button id="submit-access-token">AccessTokenをサーバに送信</button>
+        <button id="submit-id-token">IdTokenをサーバに送信</button>
       </div>
 
       <hr>
@@ -28,15 +28,15 @@ var_dump($_REQUEST);
     <script>
 $(function() {
   let fragment = document.location.href.replace(/^.*#/mgi, "");
-  let accessToken = fragment.split("&").find((text) => text.indexOf("access_token") === 0).replace(/^access_token=/mgi, "")
-  console.log(accessToken)
-  $("#access_token").html(accessToken)
+  let idToken = fragment.split("&").find((text) => text.indexOf("id_token") === 0).replace(/^id_token=/mgi, "")
+  console.log(idToken)
+  $("#id_token").html(idToken)
 
   // console.log(fragment)
   console.log("OK")
 
-  $("#submit-access-token").on("click", function(e) {
-    document.location = `//cognito.genzouw.com/check_access_token.php?access_token=${accessToken}`
+  $("#submit-id-token").on("click", function(e) {
+    document.location = `//cognito.genzouw.com/check_id_token.php?id_token=${idToken}`
   })
 })
     </script>
