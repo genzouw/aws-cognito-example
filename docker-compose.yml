@@ -5,6 +5,11 @@ services:
       context: .
     restart: always
     volumes:
-      - $PWD:/var/www
+      - $PWD:/var/www:z
     ports:
-      - 8101:80
+      - 8080:80
+    environment:
+      - COGNITO_DOMAIN=change_to
+      - COGNITO_REGION_ID=your
+      - COGNITO_USERPOOL_ID=userpool
+      - COGNITO_CLIENT_ID=settings

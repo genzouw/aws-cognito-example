@@ -14,23 +14,32 @@ use Jose\Factory\JWKFactory;
 use Jose\Loader;
 
 try {
-    // We load the key set from an URL
-    $cognitoClientId = 'ap-northeast-1_Qr5Ow2KHj';
-    $cognitoRegionId = 'ap-northeast-1';
-    $jku = "https://cognito-idp.{$cognitoRegionId}.amazonaws.com/{$cognitoClientId}/.well-known/jwks.json";
+    $cognitoRegionId = getenv('COGNITO_REGION_ID');
+    $cognitoUserpoolId = getenv('COGNITO_USERPOOL_ID');
+
+    // 公開鍵を取得
+    $jku = "https://cognito-idp.{$cognitoRegionId}.amazonaws.com/{$cognitoUserpoolId}/.well-known/jwks.json";
     $jwk = JWKFactory::createFromJKU($jku);
 
-    $loader = new Loader();
-
+    // 「ID Token」を取得
     $idToken = $_GET['id_token'];
 
-    // The signature is verified using our key set.
+    // 「ID Token」の妥当性をチェック。問題があれば例外発生
+    $loader = new Loader();
     $jws = $loader->loadAndVerifySignatureUsingKeySet(
         $idToken,
         $jwk,
         ['RS256'],
         $signatureIndex
     );
+
+    $expire = $jws->getPayload()['exp'];
+    $current = time();
+
+    // ID Tokenの有効期限切れチェック
+    if ($expire < $current) {
+        throw new Exception("ID Token has expired. ");
+    }
 
     echo '<strong style="color: green;">OK!</strong>';
     echo '<pre>';
