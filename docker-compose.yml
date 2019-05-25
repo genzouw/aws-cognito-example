@@ -13,3 +13,7 @@ services:
       - COGNITO_REGION_ID=your
       - COGNITO_USERPOOL_ID=userpool
       - COGNITO_CLIENT_ID=settings
+      - COGNITO_CALLBACK_URL=http://localhost:8080/callback.php
+      - COGNITO_RESPONSE_TYPE=token # token or code
+      # The following environment variables are required when COGNITO_RESPONSE_TYPE = code
+      # - COGNITO_CLIENT_SECRET=xxxxxx
