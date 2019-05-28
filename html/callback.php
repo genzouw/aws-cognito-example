@@ -42,7 +42,7 @@ if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
                 'http' => array(
                     'method' => 'POST',
                     'header' => array(
-                        "Content-Type: application/x-www-form-urlencoded",
+                        'Content-Type: application/x-www-form-urlencoded',
                     ),
                     'content' => http_build_query($data),
                 ),
@@ -64,7 +64,7 @@ if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
         echo '<pre>';
         var_dump(
             base64_decode(
-                explode('.', $jwt['id_token'])[1]
+                explode('.', $jwt['id_token'])[1], true
             )
         );
         echo '</pre>';
