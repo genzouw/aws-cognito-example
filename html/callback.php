@@ -3,23 +3,7 @@
     <div id="container">
       <h1>Cognito Callback Page</h1>
 <?php
-if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
-    echo '
-      <h2>access_type=codeで認証手続きが行われました。</h2>
-
-      <em>自動的に遷移します...</em>
-
-      <script>
-        // URLからフラグメント、つまり `#` より後ろの部分を取り出す
-        let fragment = document.location.href.replace(/^.*#/mgi, "");
-        // フラグメントから "id_token=~" の部分を取り出す
-        let idToken = fragment.split("&").find((text) => text.indexOf("id_token") === 0).replace(/^id_token=/mgi, "")
-
-        document.location = `/check_id_token.php?id_token=${idToken}`
-      </script>
-    ';
-} else {
-    echo '<h2>access_type=codeで認証手続きが行われました。</h2>';
+    echo '<h2>Authentication Codeが取得できました！</h2>';
 
     // Cognitoに送るPOSTリクエストのボディ情報
     $data = array(
@@ -27,7 +11,6 @@ if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
         'client_id' => getenv('COGNITO_CLIENT_ID'),
         'grant_type' => 'authorization_code',
         'redirect_uri' => getenv('COGNITO_CALLBACK_URL'),
-        'client_secret' => getenv('COGNITO_CLIENT_SECRET'),
     );
 
     // Cognitoに送るPOSTリクエストのURL
@@ -51,7 +34,8 @@ if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
     );
 
     if ($jwtJsonText) {
-        // ブラウザに"ID Token"を渡さずに、JavaScriptを使わずに認証が完了する
+        echo '<h2>Authentication CodeをつかってID Tokenが取得できました！</h2>';
+
         $jwt = (array) json_decode($jwtJsonText);
 
         echo '<h3>ID Token</h3>';
@@ -64,13 +48,22 @@ if (getenv('COGNITO_RESPONSE_TYPE') === 'token') {
         echo '<pre>';
         var_dump(
             base64_decode(
-                explode('.', $jwt['id_token'])[1], true
+                explode('.', $jwt['id_token'])[1],
+                true
             )
         );
         echo '</pre>';
     }
-}
 ?>
+
+      <button onclick="moveNextPage()">ID Tokenを使って認証必要ページにアクセスしてみます。</button>
+      <script>
+    function moveNextPage() {
+      let idToken = "<?php if (isset($jwt['id_token'])) echo $jwt['id_token']; ?>";
+
+      document.location = "/check_id_token.php?id_token=" + idToken;
+    }
+      </script>
     </div>
   </body>
 </html>

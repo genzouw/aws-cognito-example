@@ -34,8 +34,6 @@ $ cd aws-cognito-example
     * `COGNITO_USERPOOL_ID`
     * `COGNITO_CLIENT_ID`
     * `COGNITO_CALLBACK_URL=http://localhost:8080/callback.php`
-    * `COGNITO_RESPONSE_TYPE=code` ( *# token or code* )
-    * `COGNITO_CLIENT_SECRET` ( *# this environment variables are required when COGNITO_RESPONSE_TYPE = code* )
 
 If the `php` command is available, the `php -S` command is available.
 
@@ -46,13 +44,11 @@ aws-cognito-example
 # Move "Document root"
 $ cd html
 
-$ COGNITO_DOMAIN=your_domain
-$ COGNITO_REGION_ID=your_region_id
-$ COGNITO_USERPOOL_ID=your_userpool_iD
-$ COGNITO_CLIENT_ID=your_client_ID
+$ COGNITO_DOMAIN=YOUR_DOMAIN
+$ COGNITO_REGION_ID=YOUR_REGION_ID
+$ COGNITO_USERPOOL_ID=YOUR_USERPOOL_ID
+$ COGNITO_CLIENT_ID=YOUR_CLIENT_ID
 $ COGNITO_CALLBACK_URL=http://localhost:8080/callback.php
-$ COGNITO_RESPONSE_TYPE=code
-$ COGNITO_CLIENT_SECRET=your_client_secret
 
 $ php -S localhost:8080
 ```
